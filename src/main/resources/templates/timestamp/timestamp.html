@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+ <title th:text="${title}">Insert title here</title>
+</head>
+<body>
+<!--<div th:replace="~{block/header::headerA}"></div>-->
+<p id="date" class="h4 mt-5 d-flex align-items-center justify-content-center"></p>
+<p id="RealtimeClockArea" class="h1 d-flex align-items-center justify-content-center"></p>
+<form method="post" action="#" th:action="@{/AttendanceManagement/timestamp}" th:object="${TimestampForm}">
+	<input type="hidden" name="user_id" th:value="test">
+	<input type="hidden" name="name" th:value="test_name">
+	<input type="hidden" name="attendance_status" id="attendance_status" th:value="${attendance_status}">
+	<div class="section1 text-center">
+		<button id="attendance" type="submit" class="btn btn-primary">出勤</button>
+		<button id="leave" type="submit" class="btn btn-primary">退勤</button>
+	</div>
+</form>
+	<script>
+		var nowTime = new Date();
+		var nowYear = nowTime.getYear()+1900;
+		var nowMonth = nowTime.getMonth()+1;
+		var nowDate = nowTime.getDate();
+		var msg = nowYear + "/" + nowMonth + "/" +nowDate;
+		document.getElementById("date").innerHTML = msg;
+
+		var attendance_status = document.getElementById("attendance_status").value;
+		
+		if(attendance_status == "true"){
+			document.getElementById("attendance").disabled = true;
+		}else{
+			document.getElementById("leave").disabled = true;
+		}
+		
+		function setfig(num) {
+		   // 桁数が1桁だったら先頭に0を加えて2桁に調整する
+		   var ret;
+		   if( num < 10 ) { ret = "0" + num; }
+		   else { ret = num; }
+		   return ret;
+		}
+		function showClock() {
+		   var nowTime = new Date();
+		   var nowYear = nowTime.getYear()+1900;
+		   var nowMonth = nowTime.getMonth()+1;
+		   var nowDate = nowTime.getDate();
+		   var nowHour = setfig( nowTime.getHours() );
+		   var nowMin  = setfig( nowTime.getMinutes() );
+		   var nowSec  = setfig( nowTime.getSeconds() );
+		   var msg = nowHour + ":" + nowMin + ":" + nowSec;
+		   document.getElementById("RealtimeClockArea").innerHTML = msg;
+		}
+		setInterval('showClock()',1000);
+	</script>
+</body>
+</html>
