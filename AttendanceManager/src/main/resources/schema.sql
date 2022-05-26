@@ -8,3 +8,11 @@ CREATE TABLE IF NOT EXISTS timestamps (
    PRIMARY KEY(id)
 ) ;
 
+CREATE TABLE IF NOT EXISTS employees (
+   id INT NOT NULL AUTO_INCREMENT,
+   code VARCHAR(100) NOT NULL,
+   name VARCHAR(100) NOT NULL,
+   role INT(1) NOT NULL,
+   password VARCHAR(100) NOT NULL,
+   PRIMARY KEY(id)
+) ;
