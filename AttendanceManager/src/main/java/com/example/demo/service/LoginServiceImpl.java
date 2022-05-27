@@ -33,7 +33,7 @@ public class LoginServiceImpl implements AuthenticationProvider {
 	}
 	
 	@Autowired
-    MessageSource messagesource;
+	MessageSource messagesource;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -42,11 +42,12 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		String code = (String) auth.getPrincipal();
 		String password = (String) auth.getCredentials();
 		Optional<Login> loginOpt = null;
-		String message = messagesource.getMessage("E0003", null, Locale.JAPAN);
+		String failure_message = messagesource.getMessage("E0003", null, Locale.JAPAN);
+		String null_message = messagesource.getMessage("E0004", null, Locale.JAPAN);
 		
 		// 空白の場合
 		if("".equals(code) || "".equals(password)) {
-			throw new AuthenticationCredentialsNotFoundException(message);
+			throw new AuthenticationCredentialsNotFoundException(null_message);
 		}
 		
 		//　データベースで照合
@@ -54,11 +55,11 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		loginOpt = loginDao.check(code, password);
 			
 		} catch (EmptyResultDataAccessException e) {
-			throw new AuthenticationCredentialsNotFoundException(message);
+			throw new AuthenticationCredentialsNotFoundException(failure_message);
 		}
 		
 		if(!loginOpt.isPresent()) {
-			throw new AuthenticationCredentialsNotFoundException(message);
+			throw new AuthenticationCredentialsNotFoundException(failure_message);
 		}
 
 		// 権限をログイン情報に追加 
