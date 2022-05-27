@@ -37,7 +37,8 @@ public class LoginController {
 			RedirectAttributes redirectAttributes) {
 		
 		// 成功メッセージを追加
-		redirectAttributes.addFlashAttribute("success", "ログインに成功しました。");
+		String message = messagesource.getMessage("M0005", new String[]{"ログイン"}, Locale.JAPAN);
+		redirectAttributes.addFlashAttribute("success", message);
 		
 		//　ログイン情報の引き渡し
 		model.addAttribute("code", auth.getName());

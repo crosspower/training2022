@@ -2,9 +2,11 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,6 +31,9 @@ public class LoginServiceImpl implements AuthenticationProvider {
 			LoginDaoImpl loginDao) {
 		this.loginDao = loginDao;
 	}
+	
+	@Autowired
+    MessageSource messagesource;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -37,10 +42,11 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		String code = (String) auth.getPrincipal();
 		String password = (String) auth.getCredentials();
 		Optional<Login> loginOpt = null;
+		String message = messagesource.getMessage("E0003", null, Locale.JAPAN);
 		
 		// 空白の場合
 		if("".equals(code) || "".equals(password)) {
-			throw new AuthenticationCredentialsNotFoundException("IDまたはパスワードが空白です。");
+			throw new AuthenticationCredentialsNotFoundException(message);
 		}
 		
 		//　データベースで照合
@@ -48,11 +54,11 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		loginOpt = loginDao.check(code, password);
 			
 		} catch (EmptyResultDataAccessException e) {
-			throw new AuthenticationCredentialsNotFoundException("IDまたはパスワードが違います。");
+			throw new AuthenticationCredentialsNotFoundException(message);
 		}
 		
 		if(!loginOpt.isPresent()) {
-			throw new AuthenticationCredentialsNotFoundException("IDまたはパスワードが違います。");
+			throw new AuthenticationCredentialsNotFoundException(message);
 		}
 
 		// 権限をログイン情報に追加 
