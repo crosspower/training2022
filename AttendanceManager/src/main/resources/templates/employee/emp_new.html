@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css"  th:href="@{/css/starter-template.css}" rel="stylesheet">
+<title th:text="${title}">Insert title here</title>
+</head>
+<body>
+<main role="main" class="container">
+	<div class="starter-template">
+		<h1 th:text="${title}">title</h1>
+	</div>
+	
+<form method="post" action="#" th:action="@{/employee/new}" th:object="${employeeForm}">
+	<div class="form-group">
+		<label for="code">社員番号（10桁）</label>
+		<input id="code" name="code" type="text" class="form-control" th:value="*{code}"><br>
+		<div th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
+	</div>
+	<div class="form-group">
+		<label for="name">氏名</label>
+		<input id="name" name="name" type="text" class="form-control" th:value="*{name}"><br>
+		<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+	</div>
+	<div class="form-group">
+		<label for="password">パスワード</label>
+		<input id="password" name="password" type="password" class="form-control" th:value="*{password}"><br>
+		<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+	</div>
+	<div class="form-group">
+		<label for-"role">ロール</label>
+		<select name="role">
+		<option value="0">一般</option>
+		<option value="1">管理者</option>
+		</select>
+	</div><br>
+	<input type="submit" class="btn btn-primary"></button><br>
+</form><br>
+<p><a class="btn btn-outline-secondary" th:href="@{/employee}">一覧に戻る</a></p>
+</main>
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="@{/js/jquery-slim.min.js}"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"  th:src="@{/js/popper.min.js}"></script>
+    <script src="../../dist/js/bootstrap.min.js"  th:src="@{/js/bootstrap.min.js}"></script>
+ </body>
+</html>

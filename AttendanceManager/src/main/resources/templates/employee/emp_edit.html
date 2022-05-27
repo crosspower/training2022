@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+	<!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css"  th:href="@{/css/starter-template.css}" rel="stylesheet">
+<title th:text="${title}">Insert title here</title>
+</head>
+<body>
+<main role="main" class="container">
+	<div class="starter-template">
+    	<h1 th:text="${title}">Bootstrap starter template</h1>
+  	</div>
+	
+	<form method="post" action="#" th:object="${employeeInfo}" th:action="@{/employee/edit/{oldCode}(oldCode=${code})}">
+	  <div class="form-group">
+	    <label for="code">社員番号（10桁）</label>
+	    <input type="text" name="code" class="form-control" id="code" th:value="*{code}">
+	  </div>
+	  <div class="text-danger mb-4" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div><br>
+	  <div class="form-group">
+	    <label for="name">氏名</label>
+	    <input type="text" name="name" class="form-control" id="name" th:value="*{name}">
+	  </div>
+	  <div class="text-danger mb-4" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div><br>
+	  <div class="form-group">
+	  <label for="role">ロール</label>
+	  <th:block th:each="obj : ${employeeInfo}">
+		  <th:block th:if="${obj.role == 0}">
+			  <select name="role"id="role">
+				  <option value="0" selected>一般</option>
+				  <option value="1">管理者</option>
+			  </select>
+		  </th:block>
+		  <th:block th:if="${obj.role == 1}">
+			  <select name="role"id="role">
+				  <option value="0">一般</option>
+				  <option value="1" selected>管理者</option>
+			  </select>
+		  </th:block>
+	  </div><br>
+	  <button type="submit" class="btn btn-primary">登録</button>
+	</form>
+	<br>
+	<p><a class="btn btn-outline-secondary" th:href="@{/employee}">一覧に戻る</a></p>
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="@{/js/jquery-slim.min.js}"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"  th:src="@{/js/popper.min.js}"></script>
+    <script src="../../dist/js/bootstrap.min.js"  th:src="@{/js/bootstrap.min.js}"></script>
+ </body>
+</html>
