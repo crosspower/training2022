@@ -9,10 +9,9 @@ CREATE TABLE IF NOT EXISTS timestamps (
 ) ;
 
 CREATE TABLE IF NOT EXISTS employees (
-   id INT NOT NULL AUTO_INCREMENT,
-   code VARCHAR(100) NOT NULL,
-   name VARCHAR(100) NOT NULL,
+   code VARCHAR(10) NOT NULL,
+   name VARCHAR(50) NOT NULL,
    role INT(1) NOT NULL,
-   password VARCHAR(100) NOT NULL,
-   PRIMARY KEY(id)
+   password VARCHAR(20) NOT NULL,
+   PRIMARY KEY(code)
 ) ;
