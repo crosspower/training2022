@@ -1,9 +1,10 @@
 package com.example.demo.service;
 
-import java.util.List;
+import java.util.List;import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import com.example.demo.repository.EmployeeDao;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+	
+	@Autowired
+    MessageSource messagesource;
 	
 	private final EmployeeDao dao; 
 	
@@ -31,7 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//try-catchで従業員が存在しない例外の拾い上げをする。
 			return dao.findByCode(code);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EmployeeNotFoundException("指定された従業員が存在しません");
+			String message = messagesource.getMessage("E0007", new String[]{"指定された従業員"}, Locale.JAPAN);
+			throw new EmployeeNotFoundException(message);
+			//throw new EmployeeNotFoundException("指定された従業員が存在しません");
 		}
 	}
 
@@ -39,7 +45,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void update(Employee employee, String oldCode) {
 		//従業員情報更新。codeが見つからなければ例外処理
 		if(dao.update(employee, oldCode) == 0) {
-			throw new EmployeeNotFoundException("情報を更新する従業員が存在しません");
+			String message = messagesource.getMessage("E0007", new String[]{"情報を更新する従業員"}, Locale.JAPAN);
+			throw new EmployeeNotFoundException(message);
+			//throw new EmployeeNotFoundException("情報を更新する従業員が存在しません");
 		}
 	}
 

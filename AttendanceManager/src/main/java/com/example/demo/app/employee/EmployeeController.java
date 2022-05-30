@@ -1,11 +1,11 @@
 package com.example.demo.app.employee;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Employee;
@@ -23,6 +22,9 @@ import com.example.demo.service.EmployeeService;
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
+	@Autowired
+    MessageSource messagesource;
+	
 	private final EmployeeService employeeService;
 	
 	@Autowired
@@ -68,7 +70,8 @@ public class EmployeeController {
 		employee.setRole(employeeForm.getRole());
 		
 		employeeService.save(employee);
-		redirectAttributes.addFlashAttribute("complete", "従業員の追加が完了しました");
+		String message = messagesource.getMessage("M0005", new String[]{"従業員の追加"}, Locale.JAPAN);
+		redirectAttributes.addFlashAttribute("complete", message);
 		return "redirect:/employee";
 	}
 	
@@ -112,7 +115,8 @@ public class EmployeeController {
 			
 			//更新処理
 			employeeService.update(employee, oldCode);
-			redirectAttributes.addFlashAttribute("complete", "従業員情報の変更が完了しました");
+			String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
+			redirectAttributes.addFlashAttribute("complete", message);
 			return "redirect:/employee/";
 		} else {
 			model.addAttribute("title", "編集");
