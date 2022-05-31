@@ -11,12 +11,14 @@
 
 <br>
 <p th:if="${warning}" class="alert alert-danger" role="alert" th:text="${warning}"></p>
-<form method="post" action="#" th:action="@{authenticate}">
+<form method="post" action="#" th:action="@{authenticate}" th:object="${loginForm}">
 	<label>ユーザーID</label><br>
 	<input type="text" name="code"/><br>
+	<font color=red><div th:if="${code_val}" th:text="${code_val}"></div></font>
 	<br>
 	<label>パスワード</label><br>
 	<input type="password" name="password"/><br>
+	<font color=red><div th:if="${pass_val}" th:text="${pass_val}"></div></font>
 	<br>
 	<input type="submit" value="ログイン">
 </form>
