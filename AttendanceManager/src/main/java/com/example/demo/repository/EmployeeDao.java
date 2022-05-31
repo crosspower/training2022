@@ -14,5 +14,8 @@ public interface EmployeeDao {
 	int update(Employee employee, String oldCode);
 	
 	void insert(Employee employee);
+	
+	/*220530レビュー申請後追加
+	boolean CodeValid(String code);*/
 
 }

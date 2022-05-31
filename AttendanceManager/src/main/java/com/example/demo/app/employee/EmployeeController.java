@@ -62,7 +62,7 @@ public class EmployeeController {
 		if(result.hasErrors()) {
 			model.addAttribute("title", "従業員追加");
 			return "employee/emp_new";
-		}
+		} 
 		Employee employee = new Employee();
 		employee.setCode(employeeForm.getCode());
 		employee.setName(employeeForm.getName());

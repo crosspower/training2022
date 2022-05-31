@@ -6,33 +6,22 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 public class EmployeeForm {
 	
-	/* 疑問点①
-	 * String message = messageSource.getMessage("E0006", "社員番号", Locale.JAPAN);
-	 * のようにメッセージの{0}に「社員番号」などの文言を渡したいが、
-	 * @NotBlank(message=message)
-	 * としても意図したエラーメッセージが表示されない。
-	 * 
-	 * 疑問点②
-	 * 社員番号は主キーであるが、編集・追加で主キーを任意の文字列に指定したものの、
-	 * 既存の社員番号と重複した際にWhitelabel Error Pageが出る。
-	 * 対処法を探しても見つからない。
-	 */
-	@Size(max=10, message="{E0005}")
-	@NotBlank(message = "{E0006}")
+	@Size(max=10, message="{Size.code}")
+	@NotBlank(message = "{NotBlank.code}")
 	private String code;
 	
-	@NotBlank(message = "{E0006}")
+	@Size(max=50, message="{Size.name}")
+	@NotBlank(message = "{NotBlank.name}")
 	private String name;
 	
-	@NotBlank(message = "{E0006}")
+	@Size(max=20, message="{Size.password}")
+	@NotBlank(message = "{NotBlank.password}")
 	private String password;
 	
-	@NotBlank(message = "{E0006}")
+	@NotBlank(message = "{NotBlank.passwordConfirm}")
 	private String passwordConfirm;
 	
 	@Max(9)
@@ -106,7 +95,7 @@ public class EmployeeForm {
 		this.newEmployee = newEmployee;
 	}
 
-	@AssertTrue(message = "パスワードが一致しません")
+	@AssertTrue(message = "{E0007}")
 	public boolean isPasswordValid() {
 		if (password == null || password.isEmpty()) {
             return true;
@@ -115,5 +104,15 @@ public class EmployeeForm {
         return password.equals(passwordConfirm);
 	}
 	
+	/*220530レビュー申請後に追加
+	@AssertTrue(message = "{E0006}")
+	public boolean isExistCodeValid(EmployeeService employeeService) {　
+		if (code == null || code.isEmpty()) {
+			return true;
+		}
+		boolean existCode = employeeService.isExistCode(code);
+		return existCode;
+	}
+	*/
 
 }

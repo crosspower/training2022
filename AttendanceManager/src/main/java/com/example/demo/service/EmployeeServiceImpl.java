@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -35,25 +36,41 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//try-catchで従業員が存在しない例外の拾い上げをする。
 			return dao.findByCode(code);
 		} catch (EmptyResultDataAccessException e) {
-			String message = messagesource.getMessage("E0007", new String[]{"指定された従業員"}, Locale.JAPAN);
+			String message = messagesource.getMessage("E0005", new String[]{"指定された従業員"}, Locale.JAPAN);
 			throw new EmployeeNotFoundException(message);
-			//throw new EmployeeNotFoundException("指定された従業員が存在しません");
 		}
 	}
 
 	@Override
 	public void update(Employee employee, String oldCode) {
 		//従業員情報更新。codeが見つからなければ例外処理
-		if(dao.update(employee, oldCode) == 0) {
-			String message = messagesource.getMessage("E0007", new String[]{"情報を更新する従業員"}, Locale.JAPAN);
+		try {
+			if(dao.update(employee, oldCode) == 0) {
+				String message = messagesource.getMessage("E0005", new String[]{"情報を更新する従業員"}, Locale.JAPAN);
+				throw new EmployeeNotFoundException(message);
+			}
+		}catch (DuplicateKeyException d) {
+			String message = messagesource.getMessage("E0006", null, Locale.JAPAN);
 			throw new EmployeeNotFoundException(message);
-			//throw new EmployeeNotFoundException("情報を更新する従業員が存在しません");
 		}
+		
 	}
 
 	@Override
 	public void save(Employee employee) {
-		dao.insert(employee);
+		try {
+			dao.insert(employee);
+		} catch(DuplicateKeyException d) {
+			String message = messagesource.getMessage("E0006", null, Locale.JAPAN);
+			throw new EmployeeNotFoundException(message);
+		}
 	}
 
+	/*220530レビュー申請後追加
+
+	@Override
+	public boolean isExistCode(String code) {
+		return dao.CodeValid(code);
+	}
+	*/
 }

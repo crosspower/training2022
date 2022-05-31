@@ -74,5 +74,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 	}
 
+	/*220530レビュー申請後追加
+	@Override
+	public boolean CodeValid(String code) {
+		String sql = "SELECT code FROM employees WHERE code = ?";
+		Map<String, Object> emp = jdbcTemplate.queryForMap(sql, code);
+		String empCode = (String)emp.get("code");
+		
+		Optional<String> CodeOpt = Optional.ofNullable(empCode);
+		
+		return code.equals(CodeOpt);
+	}
+	*/
 
 }

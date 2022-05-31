@@ -14,5 +14,8 @@ public interface EmployeeService {
 	void update(Employee employee, String oldCode);
 	
 	void save(Employee employee);
+	
+	/*220530レビュー申請後追加
+	boolean isExistCode(String code);*/
 
 }
