@@ -61,8 +61,8 @@ public class LoginController {
 			RedirectAttributes redirectAttributes,
 			HttpSession session) {
 
-		String id_message = messagesource.getMessage("E0005", new String[]{"ID", "10"}, Locale.JAPAN);
-		String pass_message = messagesource.getMessage("E0005", new String[]{"パスワード", "20"}, Locale.JAPAN);
+		String id_message = messagesource.getMessage("E0008", new String[]{"ID", "10"}, Locale.JAPAN);
+		String pass_message = messagesource.getMessage("E0008", new String[]{"パスワード", "20"}, Locale.JAPAN);
 		
 		// メッセージ表示
 		String message = messagesource.getMessage("E0003", null, Locale.JAPAN);

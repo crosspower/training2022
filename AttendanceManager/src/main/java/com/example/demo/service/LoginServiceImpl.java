@@ -51,8 +51,8 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		// IDとパスワードの文字数を両方超えた場合
 		//　「文字数に失敗しました」と一度エラーを発生させる。
 		String over_message = messagesource.getMessage("E0002", new String[]{"文字数"}, Locale.JAPAN);
-		String over_id_message = messagesource.getMessage("E0005", new String[]{"ID", "10"}, Locale.JAPAN);
-		String over_pass_message = messagesource.getMessage("E0005", new String[]{"パスワード", "20"}, Locale.JAPAN);
+		String over_id_message = messagesource.getMessage("E0008", new String[]{"ID", "10"}, Locale.JAPAN);
+		String over_pass_message = messagesource.getMessage("E0008", new String[]{"パスワード", "20"}, Locale.JAPAN);
 		
 		// 空白の場合
 		if("".equals(code) || "".equals(password)) {
