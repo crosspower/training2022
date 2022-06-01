@@ -120,9 +120,10 @@ public class EmployeeController {
 			@PathVariable String oldCode,
 			RedirectAttributes redirectAttributes) {
 		if(result.hasErrors()) {
-			//model.addAttribute("title", "編集");
-			redirectAttributes.addFlashAttribute("EmployeeForm", employeeForm);
-			return "redirect:/employee/" + oldCode;
+			model.addAttribute("title", "編集");
+			model.addAttribute("employeeForm", employeeForm);
+			model.addAttribute("oldCode", oldCode);
+			return "employee/emp_reEdit";
 		}
 		Employee employee = makeEmployee(employeeForm);
 		
