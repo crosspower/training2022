@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+	<!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css"  th:href="@{/css/starter-template.css}" rel="stylesheet">
+<title th:text="${title}">Insert title here</title>
+</head>
+<body>
+<main role="main" class="container">
+
+  <div class="starter-template">
+  	<div class="container">
+	  <div class="row">
+	    <div class="col">
+	    	<h1 th:text="${title}">Bootstrap starter template</h1>
+	    </div>
+	    <div class="col-6"></div>
+	    <div class="col">
+	      <p><a class="btn btn-primary" th:href="@{/employee/form}">新規登録</a></p>
+	    </div>
+	  </div>
+  	</div>
+    <div th:unless="${#strings.isEmpty(complete)}" >
+		<div th:text="${complete}" class="alert alert-success" role="alert">
+		  A simple success alert?check it out!
+		</div>
+	</div>
+  </div>
+
+<table class="table table-striped">
+	<thead>
+    <tr>
+      <th scope="col">社員番号</th>
+      <th scope="col">名前</th>
+      <th scope="col">ロール</th>
+      <th scope="col">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="obj : ${empList}">
+     <!-- <th scope="row" th:text="${inquiry.id}">1</th> -->
+      <td th:text="${obj.code}"></td>
+		<td th:text="${obj.name}"></td>
+		<th:block th:switch="${obj.role}">
+			<td th:case=0 th:text="一般"></td>
+			<td th:case=1 th:text="管理者"></td>
+		</th:block>
+		<td><a class="btn btn-outline-primary" th:href="@{/employee/{code}(code=${obj.code})}">編集</a></td>
+    </tr>
+  </tbody>
+</table>
+
+</main><!-- /.container -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.2/dist/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script></body>
+</html>
