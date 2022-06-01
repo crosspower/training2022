@@ -21,7 +21,6 @@
 		<input id="code" name="code" type="text" class="form-control" th:value="*{code}">
 		<div class="text-danger" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
 		<div class="text-danger" th:text="${error}"></div><br>
-		<!--<div class="text-danger" th:if="${#fields.hasErrors('isExistCodeValid')}" th:errors="*{isExistCodeValid}"></div><br>-->
 	</div>
 	<div class="form-group">
 		<label for="name">氏名</label>
@@ -39,7 +38,7 @@
 		<div class="text-danger" th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div><br>
 	</div>
 	<div class="form-group">
-		<label for-"role">ロール</label>
+		<label for-"role">ロール</label><br>
 		<select name="role">
 		<option value="0">一般</option>
 		<option value="1">管理者</option>

@@ -44,33 +44,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void update(Employee employee, String oldCode) {
 		//従業員情報更新。codeが見つからなければ例外処理
-		try {
-			if(dao.update(employee, oldCode) == 0) {
-				String message = messagesource.getMessage("E0005", new String[]{"情報を更新する従業員"}, Locale.JAPAN);
-				throw new EmployeeNotFoundException(message);
-			}
-		}catch (DuplicateKeyException d) {
-			String message = messagesource.getMessage("E0006", null, Locale.JAPAN);
+		if(dao.update(employee, oldCode) == 0) {
+			String message = messagesource.getMessage("E0005", new String[]{"情報を更新する従業員"}, Locale.JAPAN);
 			throw new EmployeeNotFoundException(message);
 		}
-		
 	}
 
 	@Override
 	public void save(Employee employee) {
-		try {
-			dao.insert(employee);
-		} catch(DuplicateKeyException d) {
-			String message = messagesource.getMessage("E0006", null, Locale.JAPAN);
-			throw new EmployeeNotFoundException(message);
-		}
+		dao.insert(employee);
 	}
 
-	/*220530レビュー申請後追加
-
-	@Override
-	public boolean isExistCode(String code) {
-		return dao.CodeValid(code);
-	}
-	*/
 }

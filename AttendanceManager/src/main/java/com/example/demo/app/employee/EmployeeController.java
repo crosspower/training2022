@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,23 +72,31 @@ public class EmployeeController {
 		employee.setPassword(employeeForm.getPassword());
 		employee.setRole(employeeForm.getRole());
 		
-		employeeService.save(employee);
+		try {
+			employeeService.save(employee);
+		} catch (DuplicateKeyException d) {
+			String codeErrorMessage = messagesource.getMessage("E0006", null, Locale.JAPAN);
+			model.addAttribute("error", codeErrorMessage);
+			model.addAttribute("title", "従業員追加");
+			return "employee/emp_new";
+		}
+		
 		String message = messagesource.getMessage("M0005", new String[]{"従業員の追加"}, Locale.JAPAN);
 		redirectAttributes.addFlashAttribute("complete", message);
 		return "redirect:/employee";
 	}
 	
 	@GetMapping("/{code}")
-	public String show(Employee employee,
+	public String show(EmployeeForm employeeForm,
 			@PathVariable String code,
 			Model model) {
 		Optional<Employee> employeeOpt = employeeService.getEmployee(code);
 		
-		Optional<Employee> employeeInfoOpt = employeeOpt.map(em -> makeEmployeeInfo(em));
+		Optional<EmployeeForm> employeeFormOpt = employeeOpt.map(em -> makeEmployeeForm(em));
 		
 		//EmployeeがNullでなければ中身を取り出す
-		if(employeeInfoOpt.isPresent()) {
-			employee = employeeInfoOpt.get();
+		if(employeeFormOpt.isPresent()) {
+			employeeForm = employeeFormOpt.get();
 			
 		}
 		
@@ -95,26 +106,46 @@ public class EmployeeController {
 		roleList.put(1, "管理者");	
 		model.addAttribute("roleList", roleList);	*/
 		
-		model.addAttribute("employeeInfo", employee);
+		model.addAttribute("employeeForm", employeeForm);
 		
-		model.addAttribute("selectRole", employee.getRole());
+		model.addAttribute("selectRole", employeeForm.getRole());
 		model.addAttribute("title", "編集");
 		return "employee/emp_edit";
 	}
 	
 	@PostMapping("/edit/{oldCode}")
-	public String update(EmployeeForm employeeForm,
+	public String update(@Validated EmployeeForm employeeForm,
 			BindingResult result,
 			Model model,
 			@PathVariable String oldCode,
 			RedirectAttributes redirectAttributes) {
+		if(result.hasErrors()) {
+			//model.addAttribute("title", "編集");
+			redirectAttributes.addFlashAttribute("EmployeeForm", employeeForm);
+			return "redirect:/employee/" + oldCode;
+		}
+		Employee employee = makeEmployee(employeeForm);
+		
+		try {
+		employeeService.update(employee, oldCode);
+		} catch (DuplicateKeyException d) {
+			String codeErrorMessage = messagesource.getMessage("E0006", null, Locale.JAPAN);
+			redirectAttributes.addFlashAttribute("error", codeErrorMessage);
+			redirectAttributes.addFlashAttribute("title", "編集");
+			return "redirect:/employee/" + oldCode;
+		}
+		
+		String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
+		redirectAttributes.addFlashAttribute("complete", message);
+		return "redirect:/employee/";
+		/*
 		//データの格納
 		Employee employee = makeEmployee(employeeForm);
 		
 		if(!result.hasErrors()) {
-			
 			//更新処理
 			employeeService.update(employee, oldCode);
+			
 			String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
 			redirectAttributes.addFlashAttribute("complete", message);
 			return "redirect:/employee/";
@@ -122,7 +153,7 @@ public class EmployeeController {
 			model.addAttribute("title", "編集");
 			model.addAttribute("employeeInfo", employee);
 			return "redirect:/employee/" + oldCode;
-		}
+		}*/
 
 	}
 	
@@ -137,15 +168,17 @@ public class EmployeeController {
 	}
 	
 	
-	private Employee makeEmployeeInfo(Employee employee) {
-		Employee employeeInfo = new Employee();
+	private EmployeeForm makeEmployeeForm(Employee employee) {
+		EmployeeForm employeeForm = new EmployeeForm();
 		
-		employeeInfo.setCode(employee.getCode());
-		employeeInfo.setName(employee.getName());
-		employeeInfo.setPassword(employee.getPassword());
-		employeeInfo.setRole(employee.getRole());
+		employeeForm.setCode(employee.getCode());
+		employeeForm.setName(employee.getName());
+		employeeForm.setPassword("dummy");
+		employeeForm.setPasswordConfirm("dummy");
+		employeeForm.setRole(employee.getRole());
+		employeeForm.setNewEmployee(false);
 		
-		return employeeInfo;
+		return employeeForm;
 	}
 
 }
