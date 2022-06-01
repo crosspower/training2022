@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 			// login画面,css,jsにはアクセス制限をかけない。
 			.antMatchers("/login","/login/error", "/css/**", "/js/**").permitAll()
-			//.antMatchers("/h2-console/**").permitAll()	// H2DBデバッグ用
+			.antMatchers("/h2-console/**").permitAll()	// H2DBデバッグ用
 			// それ以外は制限をかける。（これを外すとどのアドレスにも制限がかからなくなる。）
 			.anyRequest().authenticated()
 			.and()
