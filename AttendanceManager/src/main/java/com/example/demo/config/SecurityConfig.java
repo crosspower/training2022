@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import com.example.demo.app.login.LoginForm;
 import com.example.demo.service.LoginServiceImpl;
 
 @Configuration
@@ -22,8 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.authorizeRequests()
 			// login画面,css,jsにはアクセス制限をかけない。
-			.antMatchers("/login", "/css/**", "/js/**").permitAll()
-			//.antMatchers("/h2-console/**").permitAll()	// H2DBデバッグ用
+			.antMatchers("/login","/login/error", "/css/**", "/js/**").permitAll()
+			.antMatchers("/h2-console/**").permitAll()	// H2DBデバッグ用
 			// それ以外は制限をかける。（これを外すとどのアドレスにも制限がかからなくなる。）
 			.anyRequest().authenticated()
 			.and()
@@ -35,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// ログイン成功時に移動　（LoginController）
 			.defaultSuccessUrl("/login/success")
 			// ログイン失敗時に移動　（LoginController)
-			.failureUrl("/login/error")
+			.failureHandler(new MyAuthenticationFailureHandler())
 			// ID、パスワードの変数名
 			.usernameParameter("code")
 			.passwordParameter("password")

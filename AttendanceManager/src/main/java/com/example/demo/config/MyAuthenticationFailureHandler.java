@@ -1,0 +1,31 @@
+package com.example.demo.config;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+
+	@Override
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException exception) throws IOException, ServletException {
+		
+		String error_msg = "";
+		if (exception.getMessage() != "") {
+			error_msg = exception.getMessage();
+		}
+		HttpSession session = request.getSession();
+		session.setAttribute("error_msg", error_msg);
+		session.setAttribute("val", "validation");
+		
+		//「login/error」に移動（Controller）
+        response.sendRedirect(request.getContextPath() + "/login/error");
+	}
+
+}
