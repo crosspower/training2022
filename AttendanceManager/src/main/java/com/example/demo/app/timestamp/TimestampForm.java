@@ -5,9 +5,6 @@ public class TimestampForm {
 	private String user_id;
 	private String name;
 	private boolean attendance_status;
-	
-	
-	public TimestampForm() {}
 
     public TimestampForm(String user_id,String name,boolean attendance_status) {
 		super();
@@ -32,7 +29,7 @@ public class TimestampForm {
 		this.name = name;
 	}
 
-	public boolean isAttendance_status() {
+	public boolean getAttendance_status() {
 		return attendance_status;
 	}
 

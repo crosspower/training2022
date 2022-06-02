@@ -10,12 +10,13 @@
 <p id="date" class="h4 mt-5 d-flex align-items-center justify-content-center"></p>
 <p id="RealtimeClockArea" class="h1 d-flex align-items-center justify-content-center"></p>
 <form method="post" action="#" th:action="@{/AttendanceManagement/timestamp}" th:object="${TimestampForm}">
-	<input type="hidden" name="user_id" th:value="test">
-	<input type="hidden" name="name" th:value="test_name">
+	<input type="hidden" name="user_id" th:value="${code}">
+	<input type="hidden" name="name" th:value="${name}">
 	<input type="hidden" name="attendance_status" id="attendance_status" th:value="${attendance_status}">
 	<div class="section1 text-center">
 		<button id="attendance" type="submit" class="btn btn-primary">出勤</button>
 		<button id="leave" type="submit" class="btn btn-primary">退勤</button>
+		<font color="red"><p id="complete">本日は打刻済みです。</p></font>
 	</div>
 </form>
 	<script>
@@ -30,7 +31,12 @@
 		
 		if(attendance_status == "true"){
 			document.getElementById("attendance").disabled = true;
-		}else{
+			document.getElementById("complete").hidden = true;
+		}else if(attendance_status == "false"){
+			document.getElementById("leave").disabled = true;
+			document.getElementById("complete").hidden = true;
+		}else {
+			document.getElementById("attendance").disabled = true;
 			document.getElementById("leave").disabled = true;
 		}
 		

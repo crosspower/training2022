@@ -21,7 +21,7 @@ public class Timestamp {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
-	public boolean isAttendance_status() {
+	public boolean getAttendance_status() {
 		return attendance_status;
 	}
 	public void setAttendance_status(boolean attendance_status) {
