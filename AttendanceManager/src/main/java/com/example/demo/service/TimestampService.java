@@ -6,5 +6,5 @@ public interface TimestampService {
 		
 		void Insert(Timestamp timestamp);
 		
-		boolean getAttendance_status(String user_id);
+		String getAttendance_status(String user_id);
 }

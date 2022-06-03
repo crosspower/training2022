@@ -18,7 +18,7 @@ private final JdbcTemplate jdbcTemplate;
 
 	@Override
 	public void InsertTimestamp(Timestamp timestamp) {
-		if(timestamp.isAttendance_status()) {
+		if(timestamp.getAttendance_status()) {
 			jdbcTemplate.update("UPDATE timestamps SET leave_time = ? WHERE user_id = ? AND attendance_date = (SELECT MAX(attendance_date) FROM timestamps)",
 					 getTime(),timestamp.getUser_id());
 		}else {
@@ -39,18 +39,18 @@ private final JdbcTemplate jdbcTemplate;
 	}
 	
 	@Override
-	public boolean getAttendance_status(String user_id) {
+	public String getAttendance_status(String user_id) {
 		String sql = "SELECT leave_time FROM timestamps WHERE user_id = ?  ORDER BY attendance_date DESC LIMIT 1";
 		try{
 			Map<String, Object> result = jdbcTemplate.queryForMap(sql, user_id);
 			if(result.get("leave_time") != null) {
-				return false;
+				return "complete";
 			}else {
-				return true;
+				return "leave";
 			}
 		}
 		catch(Exception e) {
-			return false;
+			return "attend";
 		}
 	}
 }

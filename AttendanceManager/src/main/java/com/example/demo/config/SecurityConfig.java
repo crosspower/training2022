@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import com.example.demo.app.login.LoginForm;
 import com.example.demo.service.LoginServiceImpl;
 
 @Configuration
@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 			// login画面,css,jsにはアクセス制限をかけない。
 			.antMatchers("/login","/login/error", "/css/**", "/js/**").permitAll()
-			.antMatchers("/h2-console/**").permitAll()	// H2DBデバッグ用
 			// それ以外は制限をかける。（これを外すとどのアドレスにも制限がかからなくなる。）
 			.anyRequest().authenticated()
 			.and()
@@ -52,6 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//http.csrf().disable();	// H2DBデバッグ用
 		//http.headers().frameOptions().disable(); // H2DBデバッグ用
 	}
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web
+	    	.ignoring()
+	        .antMatchers("/h2-console/**");
+	    }
 	
 	// 認証情報
 	@Autowired

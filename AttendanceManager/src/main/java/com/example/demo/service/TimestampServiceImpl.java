@@ -19,7 +19,7 @@ private final TimestampDao dao;
 	}
 	
 	@Override
-	public boolean getAttendance_status(String user_id) {
+	public String getAttendance_status(String user_id) {
 		return dao.getAttendance_status(user_id);
 	}
 }

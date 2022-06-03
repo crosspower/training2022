@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,10 +32,23 @@ public class TimestampController {
 	}
 
 	@GetMapping("/timestamp")
-	public String timestamp(Model model) {
+	public String timestamp(Model model, Authentication auth) {
 		model.addAttribute("title", "timestamp");
-		boolean attendance_status = timestampService.getAttendance_status("test");
-		model.addAttribute("attendance_status", attendance_status);
+		String attendance_status = timestampService.getAttendance_status(auth.getName());
+		// 条件分岐
+		// 出勤前
+		if (attendance_status == "attend") {
+			model.addAttribute("attendance_status", false);
+		} else if (attendance_status == "leave") {
+			model.addAttribute("attendance_status", true);
+		} else if (attendance_status == "complete") {
+			model.addAttribute("attendance_status", "complete");
+		}
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities());
+		
 
 		return "timestamp/timestamp";
 	}
@@ -46,7 +60,7 @@ public class TimestampController {
 		Timestamp timestamp = new Timestamp();
 		timestamp.setUser_id(timestampForm.getUser_id());
 		timestamp.setName(timestampForm.getName());
-		timestamp.setAttendance_status(timestampForm.isAttendance_status());
+		timestamp.setAttendance_status(timestampForm.getAttendance_status());
 
         if (!result.hasErrors()) {
         	//TimestampFormのデータをtimestampsに格納
