@@ -63,7 +63,7 @@ public class EmployeeController {
 			Model model,
 			RedirectAttributes redirectAttributes) {
 		if(result.hasErrors()) {
-			model.addAttribute("title", "従業員追加");
+			model.addAttribute("title", "新規追加");
 			return "employee/emp_new";
 		} 
 		Employee employee = new Employee();
@@ -77,7 +77,7 @@ public class EmployeeController {
 		} catch (DuplicateKeyException d) {
 			String codeErrorMessage = messagesource.getMessage("E0006", null, Locale.JAPAN);
 			model.addAttribute("error", codeErrorMessage);
-			model.addAttribute("title", "従業員追加");
+			model.addAttribute("title", "新規追加");
 			return "employee/emp_new";
 		}
 		

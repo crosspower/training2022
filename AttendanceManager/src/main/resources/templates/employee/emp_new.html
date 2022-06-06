@@ -39,9 +39,9 @@
 	</div>
 	<div class="form-group">
 		<label for-"role">ロール</label><br>
-		<select name="role">
-		<option value="0">一般</option>
-		<option value="1">管理者</option>
+		<select name="role" th:each="obj : ${employeeForm}">
+		<option value="0" th:selected="${obj.role} == 0">一般</option>
+		<option value="1" th:selected="${obj.role} == 1">管理者</option>
 		</select>
 	</div><br>
 	<input type="submit" class="btn btn-primary"></button><br>
