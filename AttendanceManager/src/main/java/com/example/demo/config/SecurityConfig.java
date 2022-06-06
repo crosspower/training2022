@@ -1,12 +1,15 @@
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.service.LoginServiceImpl;
 
@@ -16,6 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private LoginServiceImpl loginService;
+	
+	@Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -47,11 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutSuccessUrl("/login/index.html")
 			.invalidateHttpSession(true)
 			.permitAll();
-		
-		//http.csrf().disable();	// H2DBデバッグ用
-		//http.headers().frameOptions().disable(); // H2DBデバッグ用
 	}
 	
+	// H2DBデバッグ用
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web
