@@ -7,6 +7,10 @@
 </head>
 <body>
 <!--<div th:replace="~{block/header::headerA}"></div>-->
+<div class="m-5">
+	<p th:if="${warning}" class="alert alert-danger" role="alert" th:text="${warning}"></p>
+	<p th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></p>
+</div>
 <p id="date" class="h4 mt-5 d-flex align-items-center justify-content-center"></p>
 <p id="RealtimeClockArea" class="h1 d-flex align-items-center justify-content-center"></p>
 <form method="post" action="#" th:action="@{/AttendanceManagement/timestamp}" th:object="${TimestampForm}">

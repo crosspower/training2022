@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Timestamp;
 import com.example.demo.service.TimestampService;
@@ -56,11 +57,19 @@ public class TimestampController {
 	@PostMapping("/timestamp")
 	public String timestamp(@Valid @ModelAttribute TimestampForm timestampForm,
 	        BindingResult result,
-	        Model model) {
+	        Model model,
+	        RedirectAttributes redirectAttributes) {
 		Timestamp timestamp = new Timestamp();
 		timestamp.setUser_id(timestampForm.getUser_id());
 		timestamp.setName(timestampForm.getName());
 		timestamp.setAttendance_status(timestampForm.getAttendance_status());
+		
+		// 非ログインユーザーの確認
+		if (timestamp.getUser_id().equals("") || timestamp.getName().equals("")) {
+			String message = messagesource.getMessage("E0009", null, Locale.JAPAN);
+			redirectAttributes.addFlashAttribute("warning", message);
+			return "redirect:/AttendanceManagement/timestamp";
+		}
 
         if (!result.hasErrors()) {
         	//TimestampFormのデータをtimestampsに格納
