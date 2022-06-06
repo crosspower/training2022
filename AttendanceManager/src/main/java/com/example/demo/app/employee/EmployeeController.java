@@ -96,16 +96,8 @@ public class EmployeeController {
 		
 		//EmployeeがNullでなければ中身を取り出す
 		if(employeeFormOpt.isPresent()) {
-			employeeForm = employeeFormOpt.get();
-			
+			employeeForm = employeeFormOpt.get();	
 		}
-		
-		/*Map<String, String> roleList = new LinkedHashMap<String, String>();
-		
-		roleList.put(0, "一般");
-		roleList.put(1, "管理者");	
-		model.addAttribute("roleList", roleList);	*/
-		
 		model.addAttribute("employeeForm", employeeForm);
 		
 		model.addAttribute("selectRole", employeeForm.getRole());
@@ -139,23 +131,6 @@ public class EmployeeController {
 		String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
 		redirectAttributes.addFlashAttribute("complete", message);
 		return "redirect:/employee/";
-		/*
-		//データの格納
-		Employee employee = makeEmployee(employeeForm);
-		
-		if(!result.hasErrors()) {
-			//更新処理
-			employeeService.update(employee, oldCode);
-			
-			String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
-			redirectAttributes.addFlashAttribute("complete", message);
-			return "redirect:/employee/";
-		} else {
-			model.addAttribute("title", "編集");
-			model.addAttribute("employeeInfo", employee);
-			return "redirect:/employee/" + oldCode;
-		}*/
-
 	}
 	
 	private Employee makeEmployee(EmployeeForm employeeForm) {

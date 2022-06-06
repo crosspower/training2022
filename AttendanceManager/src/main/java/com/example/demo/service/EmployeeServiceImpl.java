@@ -1,12 +1,13 @@
 package com.example.demo.service;
 
-import java.util.List;import java.util.Locale;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Employee;
@@ -17,6 +18,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
     MessageSource messagesource;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	private final EmployeeDao dao; 
 	
@@ -52,6 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void save(Employee employee) {
+		// パスワードをハッシュ化
+		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		dao.insert(employee);
 	}
 
