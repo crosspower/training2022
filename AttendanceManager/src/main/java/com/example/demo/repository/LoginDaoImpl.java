@@ -30,12 +30,12 @@ public class LoginDaoImpl implements LoginDao {
 	 * データベースで照合を行う
 	 */
 	@Override
-	public Optional<Login> check(String code, String password){
+	public Optional<Login> check(String code){
 		
 		String sql = "SELECT code, name, role, password FROM employees "
-		+ "WHERE code = ? AND password = ?";
+		+ "WHERE code = ?";
 			
-		Map<String, Object> result = jdbcTemplate.queryForMap(sql, code, password);
+		Map<String, Object> result = jdbcTemplate.queryForMap(sql, code);
 		
 		// 情報を詰め替え
 		Login login = new Login();
