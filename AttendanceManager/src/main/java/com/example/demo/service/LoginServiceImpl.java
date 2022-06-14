@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +29,6 @@ public class LoginServiceImpl implements AuthenticationProvider {
 	private final LoginDaoImpl loginDao;
 	
 	@Autowired
-	@Lazy
-	PasswordEncoder passwordEncoder;
-	
-	@Autowired
 	public LoginServiceImpl(
 			LoginDaoImpl loginDao) {
 		this.loginDao = loginDao;
@@ -41,6 +36,10 @@ public class LoginServiceImpl implements AuthenticationProvider {
 	
 	@Autowired
 	MessageSource messagesource;
+	
+	@Autowired
+	@Lazy
+	PasswordEncoder passwordEncoder;
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -78,6 +77,7 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		//　データベースで照合
 		try {
 		loginOpt = loginDao.check(code);
+			
 		} catch (EmptyResultDataAccessException e) {
 			throw new AuthenticationCredentialsNotFoundException(failure_message);
 		}
@@ -90,8 +90,8 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		Collection<GrantedAuthority> authorityList = new ArrayList<>();
 		Optional<LoginForm> loginFormOpt = loginOpt.map(l -> makeLoginForm(l));
 		LoginForm loginForm = loginFormOpt.get();
-		
-		if (!passwordEncoder.matches(password, loginForm.getPassword())) {
+	
+		if(!passwordEncoder.matches(password, loginForm.getPassword())) {
 			throw new AuthenticationCredentialsNotFoundException(failure_message);
 		}
 		 
