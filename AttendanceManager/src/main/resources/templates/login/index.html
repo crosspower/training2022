@@ -6,9 +6,8 @@
  <title th:text="${title}">Insert title here</title>
 </head>
 <body>
-<!--<div th:replace="~{block/header::headerA}"></div>-->
+<div th:replace="~{block/header::headerA}"></div>
 <main role="main" class="container">
-
 <br>
 <p th:if="${warning}" class="alert alert-danger" role="alert" th:text="${warning}"></p>
 <form method="post" action="#" th:action="@{authenticate}" th:object="${loginForm}">

@@ -5,10 +5,9 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.validation.ValidationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.app.login.LoginForm;
@@ -27,6 +28,10 @@ import com.example.demo.repository.LoginDaoImpl;
 public class LoginServiceImpl implements AuthenticationProvider {
 	
 	private final LoginDaoImpl loginDao;
+	
+	@Autowired
+	@Lazy
+	PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public LoginServiceImpl(
@@ -72,8 +77,7 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		
 		//　データベースで照合
 		try {
-		loginOpt = loginDao.check(code, password);
-			
+		loginOpt = loginDao.check(code);
 		} catch (EmptyResultDataAccessException e) {
 			throw new AuthenticationCredentialsNotFoundException(failure_message);
 		}
@@ -86,6 +90,10 @@ public class LoginServiceImpl implements AuthenticationProvider {
 		Collection<GrantedAuthority> authorityList = new ArrayList<>();
 		Optional<LoginForm> loginFormOpt = loginOpt.map(l -> makeLoginForm(l));
 		LoginForm loginForm = loginFormOpt.get();
+		
+		if (!passwordEncoder.matches(password, loginForm.getPassword())) {
+			throw new AuthenticationCredentialsNotFoundException(failure_message);
+		}
 		 
 		 if (loginForm.getRole() == 1) {
 			 authorityList.add(new SimpleGrantedAuthority("admin"));
