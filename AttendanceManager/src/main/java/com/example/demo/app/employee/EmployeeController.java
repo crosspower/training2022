@@ -1,5 +1,7 @@
 package com.example.demo.app.employee;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -7,7 +9,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -151,6 +158,7 @@ public class EmployeeController {
 		model.addAttribute("name", auth.getDetails());
 		model.addAttribute("role", auth.getAuthorities().toString());
 		
+		// バリデーション
 		if(result.hasErrors()) {
 			model.addAttribute("title", "編集");
 			model.addAttribute("employeeForm", employeeForm);
@@ -159,8 +167,10 @@ public class EmployeeController {
 		}
 		Employee employee = makeEmployee(employeeForm);
 		
+		// 社員情報を更新
 		try {
 		employeeService.update(employee, oldCode);
+		// エラー処理
 		} catch (DuplicateKeyException d) {
 			String codeErrorMessage = messagesource.getMessage("E0006", null, Locale.JAPAN);
 			redirectAttributes.addFlashAttribute("error", codeErrorMessage);
@@ -170,6 +180,42 @@ public class EmployeeController {
 		
 		String message = messagesource.getMessage("M0005", new String[]{"従業員情報の編集"}, Locale.JAPAN);
 		redirectAttributes.addFlashAttribute("complete", message);
+		
+		// ログイン中の社員情報を更新した場合
+		if (oldCode.equals(auth.getName())) {
+			
+			// 更新された社員情報を取得
+			Optional<Employee> employeeOpt = employeeService.getEmployee(employee.getCode());
+			Optional<EmployeeForm> employeeFormOpt = employeeOpt.map(em -> makeEmployeeForm(em));
+			
+			//EmployeeがNullでなければ中身を取り出す
+			if(employeeFormOpt.isPresent()) {
+				employeeForm = employeeFormOpt.get();	
+			}
+			
+			// 権限の登録
+			Collection<GrantedAuthority> authorityList = new ArrayList<>();
+			if (employeeForm.getRole() == 1) {
+				 authorityList.add(new SimpleGrantedAuthority("admin"));
+			 } else {
+				 authorityList.add(new SimpleGrantedAuthority("user"));
+			 }
+			
+			 // ログイン情報を保持するTokenに入れ込む
+			SecurityContext context = SecurityContextHolder.getContext();
+			UsernamePasswordAuthenticationToken token
+			= new UsernamePasswordAuthenticationToken(employeeForm.getCode(), employeeForm.getPassword(), authorityList);
+			context.setAuthentication(token);
+			 
+			// 名前の設定
+			token.setDetails(employeeForm.getName());
+		}
+
+		// ログイン情報（再取得）
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+		
 		return "redirect:/employee/";
 	}
 	
