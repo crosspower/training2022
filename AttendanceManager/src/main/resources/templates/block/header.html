@@ -39,9 +39,9 @@
               </a>
             </li>
           </ul>
-          <div class="d-flex ml-auto p-2 bd-highlight" th:if="${name}">
+          <div class="d-flex ms-auto bd-highlight flex-wrap align-items-center justify-content-centerp-2" th:if="${name}">
             <div class="align-self-center">
-              <a class="navbar-brand text-dark" th:text="ようこそ、 + ${name} + さん">text</a>
+              <a class="navbar-brand text-dark" th:text="${name} + さん">text</a>
             </div>
             <form class="navbar-nav my-2 my-md-0">
               <li>
