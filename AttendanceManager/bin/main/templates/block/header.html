@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:fragment="headerA">
+    <div class="bg-white text-dark">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a class="navbar-brand text-dark" href="#">勤怠管理システム</a>
+          <ul class="nav col-12 col-lg-auto justify-content-center m-0 text-small" th:if="${name}">
+            <li>
+              <a class="nav-link text-dark" th:href="@{/AttendanceManagement/timestamp}">
+    	        <span class="material-symbols-rounded size-48">
+			      schedule
+		        </span><br>
+    	          打刻
+              </a>
+            </li>
+            <li>
+              <a class="nav-link text-dark" th:href="@{/hoge}">
+    	        <span class="material-symbols-rounded size-48">
+			      event_note
+		        </span><br>
+    	          日次管理
+              </a>
+            </li>
+            <li>
+              <a class="nav-link text-dark" th:href="@{/employee}" th:if="${role == '[admin]'}">
+    	        <span class="material-symbols-rounded size-48">
+			      manage_accounts
+		        </span><br>
+    	          管理者
+              </a>
+            </li>
+            <li>
+              <a class="nav-link text-dark" th:href="@{/setting}">
+    	        <span class="material-symbols-rounded size-48">
+			      person
+		        </span><br>
+    	          個人設定
+              </a>
+            </li>
+          </ul>
+          <div class="d-flex ms-auto bd-highlight flex-wrap align-items-center justify-content-centerp-2" th:if="${name}">
+            <div class="align-self-center">
+              <a class="navbar-brand text-dark" th:text="${name} + さん">text</a>
+            </div>
+            <form class="navbar-nav my-2 my-md-0">
+              <li>
+                <a class="nav-link text-dark" th:href="@{/login}">
+                  <span class="material-symbols-rounded size-48">
+			        logout
+		          </span><br>
+                    ログアウト
+                </a>
+              </li>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+<hr class="col-md-11 m-auto" noshade="">
+<div class="m-5"></div>
+</header>
