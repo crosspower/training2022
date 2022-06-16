@@ -24,6 +24,7 @@ public class LoginController {
 	/*
 	 * ログイン画面に移動
 	 */
+	 // test
 	@GetMapping
 	public String Login() {
 		return "login/index";
