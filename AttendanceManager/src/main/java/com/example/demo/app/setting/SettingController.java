@@ -1,22 +1,23 @@
 package com.example.demo.app.setting;
 
-import java.time.LocalDateTime;
 import java.util.Locale;
 
-import org.springframework.context.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.service.SettingNotFoundException;
 import com.example.demo.service.SettingService;
 
 @Controller
@@ -79,5 +80,13 @@ public class SettingController {
 				messagesource.getMessage("M0003", new String[] { "パスワード" }, Locale.getDefault()));
 		return "redirect:/setting";
 	}
+	
+	// データ更新時エラー時、エラー画面を表示
+	@ExceptionHandler(SettingNotFoundException.class)
+	public String handleException(SettingNotFoundException e, Model model) {
+		model.addAttribute("errorMessage", e);
+		return "error/SettingErrorPage";
+	}
+	
 
 }
