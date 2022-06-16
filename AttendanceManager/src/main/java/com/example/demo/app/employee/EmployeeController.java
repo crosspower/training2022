@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,24 +35,43 @@ public class EmployeeController {
 	}
 	
 	@GetMapping
-	public String index(Model model) {
+	public String index(Model model, Authentication auth) {
 		List<Employee> list = employeeService.getAll();
 		
 		model.addAttribute("empList", list);
 		model.addAttribute("title", "社員一覧");
 		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+		
 		return "employee/emp_index";
 	}
 	
 	@GetMapping("/form")
-	public String form(EmployeeForm employeeForm,Model model) {
+	public String form(EmployeeForm employeeForm, Model model,
+			Authentication auth) {
 		model.addAttribute("title", "新規追加");
+		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+				
 		return "employee/emp_new";
 	}
 	
 	@PostMapping("/form")
-	public String formGoBack(EmployeeForm employeeForm,Model model) {
+	public String formGoBack(EmployeeForm employeeForm,Model model,
+			Authentication auth) {
 		model.addAttribute("title", "新規追加");
+		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+		
 		return "employee/emp_new";
 	}
 	
@@ -61,7 +79,15 @@ public class EmployeeController {
 	public String newEmp(@Validated EmployeeForm employeeForm,
 			BindingResult result,
 			Model model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,
+			Authentication auth) {
+		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+				
+		
 		if(result.hasErrors()) {
 			model.addAttribute("title", "新規追加");
 			return "employee/emp_new";
@@ -89,7 +115,8 @@ public class EmployeeController {
 	@GetMapping("/{code}")
 	public String show(EmployeeForm employeeForm,
 			@PathVariable String code,
-			Model model) {
+			Model model,
+			Authentication auth) {
 		Optional<Employee> employeeOpt = employeeService.getEmployee(code);
 		
 		Optional<EmployeeForm> employeeFormOpt = employeeOpt.map(em -> makeEmployeeForm(em));
@@ -99,9 +126,15 @@ public class EmployeeController {
 			employeeForm = employeeFormOpt.get();	
 		}
 		model.addAttribute("employeeForm", employeeForm);
-		
+		model.addAttribute("oldCode", employeeForm.getCode());
 		model.addAttribute("selectRole", employeeForm.getRole());
 		model.addAttribute("title", "編集");
+		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+		
 		return "employee/emp_edit";
 	}
 	
@@ -110,7 +143,14 @@ public class EmployeeController {
 			BindingResult result,
 			Model model,
 			@PathVariable String oldCode,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,
+			Authentication auth) {
+		
+		// ログイン情報
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());
+		
 		if(result.hasErrors()) {
 			model.addAttribute("title", "編集");
 			model.addAttribute("employeeForm", employeeForm);
