@@ -126,7 +126,7 @@ public class EmployeeController {
 			employeeForm = employeeFormOpt.get();	
 		}
 		model.addAttribute("employeeForm", employeeForm);
-		
+		model.addAttribute("oldCode", employeeForm.getCode());
 		model.addAttribute("selectRole", employeeForm.getRole());
 		model.addAttribute("title", "編集");
 		
