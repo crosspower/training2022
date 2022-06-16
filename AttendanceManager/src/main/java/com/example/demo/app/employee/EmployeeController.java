@@ -133,7 +133,7 @@ public class EmployeeController {
 			employeeForm = employeeFormOpt.get();	
 		}
 		model.addAttribute("employeeForm", employeeForm);
-		
+		model.addAttribute("oldCode", employeeForm.getCode());
 		model.addAttribute("selectRole", employeeForm.getRole());
 		model.addAttribute("title", "編集");
 		
@@ -158,7 +158,7 @@ public class EmployeeController {
 		model.addAttribute("name", auth.getDetails());
 		model.addAttribute("role", auth.getAuthorities().toString());
 		
-		// バリデーション
+    // バリデーション
 		if(result.hasErrors()) {
 			model.addAttribute("title", "編集");
 			model.addAttribute("employeeForm", employeeForm);
