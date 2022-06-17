@@ -48,7 +48,7 @@ public class TimestampController {
 		// ログイン情報
 		model.addAttribute("code", auth.getName());
 		model.addAttribute("name", auth.getDetails());
-		model.addAttribute("role", auth.getAuthorities());
+		model.addAttribute("role", auth.getAuthorities().toString());
 		
 
 		return "timestamp/timestamp";

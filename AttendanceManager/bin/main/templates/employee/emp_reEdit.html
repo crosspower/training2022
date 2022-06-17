@@ -4,12 +4,21 @@
 <meta charset="UTF-8">
 	<!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-
+    
     <!-- Custom styles for this template -->
     <link href="starter-template.css"  th:href="@{/css/starter-template.css}" rel="stylesheet">
+    
+    <!-- style.css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    
+    <!-- google font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+
 <title th:text="${title}">Insert title here</title>
 </head>
 <body>
+<div th:replace="~{block/header::headerA}"></div>
+
 <main role="main" class="container">
 	<div class="starter-template">
     	<h1 th:text="${title}">Bootstrap starter template</h1>
