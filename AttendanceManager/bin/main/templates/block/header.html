@@ -4,7 +4,7 @@
     <div class="bg-white text-dark">
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a class="navbar-brand text-dark" href="#">勤怠管理システム</a>
+          <a class="navbar-brand text-dark mx-2" href="#">勤怠管理システム</a>
           <ul class="nav col-12 col-lg-auto justify-content-center m-0 text-small" th:if="${name}">
             <li>
               <a class="nav-link text-dark" th:href="@{/AttendanceManagement/timestamp}">
@@ -39,7 +39,7 @@
               </a>
             </li>
           </ul>
-          <div class="d-flex ms-auto bd-highlight flex-wrap align-items-center justify-content-centerp-2" th:if="${name}">
+          <div class="d-flex ms-auto bd-highlight flex-wrap align-items-center justify-content-center" th:if="${name}">
             <div class="align-self-center">
               <a class="navbar-brand text-dark" th:text="${name} + さん">text</a>
             </div>
