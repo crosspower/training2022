@@ -42,10 +42,10 @@ public class SettingController {
 	public String setting(Authentication auth, SettingForm settingForm, Model model,
 			@ModelAttribute("message") String message) {
 
-		String code = auth.getName(); // 社員番号の取得
-
-		model.addAttribute("code", code);
-		model.addAttribute("title", "個人設定");
+		// ログイン情報の引き渡し
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities());
 
 		return "setting/form";
 	}
@@ -80,13 +80,12 @@ public class SettingController {
 				messagesource.getMessage("M0003", new String[] { "パスワード" }, Locale.getDefault()));
 		return "redirect:/setting";
 	}
-	
+
 	// データ更新時エラー時、エラー画面を表示
 	@ExceptionHandler(SettingNotFoundException.class)
 	public String handleException(SettingNotFoundException e, Model model) {
 		model.addAttribute("errorMessage", e);
 		return "error/SettingErrorPage";
 	}
-	
 
 }

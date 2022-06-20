@@ -18,14 +18,12 @@
 </head>
 <body>
 <div th:replace="~{block/header::headerA}"></div>
-
 <main role="main" class="container">
 	<div class="starter-template">
     	<h1 th:text="${title}">Bootstrap starter template</h1>
   	</div>
-
+	
 	<form method="post" action="#" th:object="${employeeForm}" th:action="@{/employee/edit/{oldCode}(oldCode=${oldCode})}">
-
 	  <div>
         <input type="hidden" id="password" name="password" value="dummy">
         <input type="hidden" id="passwordConfirm" name="passwordConfirm" value="dummy">

@@ -10,4 +10,3 @@ INSERT INTO timestamps(id, user_id, name, attendance_time, leave_time, attendanc
 VALUES (null, 'test_code', 'test_name', '10:00:02.348', '19:00:45.842', '2022-06-06');
 INSERT INTO timestamps(id, user_id, name, attendance_time, leave_time, attendance_date)
 VALUES (null, 'test_code', 'test_name', '10:00:02.348', null, '2022-06-07');
-
