@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title th:text="${title}">日次勤怠編集画面</title>
+</head>
+
+<body>
+
+	<h1 th:text="${title}">日次勤怠編集画面</h1>
+	<h2>選択した日付</h2>
+
+	<form method="post" action="#"  th:object="${informationForm}" th:action="@{/info/{id}(id=${id})}">
+
+		<!--  <input th:if="${id}" type="hidden" name="id" th:value="${id}">  -->
+
+
+		<label for="attendance_time">出勤時間</label><br>
+		<input id="attendance_time" name="attendance_time" type="text"><br>
+		<div th:if="${#fields.hasErrors('attendance_time')}" th:errors="*{attendance_time}"></div>
+
+		<label for="leave_time">退勤時間</label><br>
+		<input id="leave_time" name="leave_time" type="text"><br>
+		<div th:if="${#fields.hasErrors('leave_time')}" th:errors="*{leave_time}"></div>
+
+		<input type="submit" value="登録">
+
+	</form>
+
+</body>
+
+</html>
