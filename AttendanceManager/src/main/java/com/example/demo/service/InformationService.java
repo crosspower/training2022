@@ -5,6 +5,7 @@ import com.example.demo.entity.Information;
 public interface InformationService {
 	
     void save(Information informaion);
+    
     List<Information> getAll();
     Optional<Information> getInformation(int id);
 }

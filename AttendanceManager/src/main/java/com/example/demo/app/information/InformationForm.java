@@ -1,19 +1,18 @@
 package com.example.demo.app.information;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class InformationForm {
 
 	private int id;
-
-	//@NotBlank(message = "退勤時間を入力してください")
-	@NotBlank(message = "{NotBlank.attendance}")
+	
+	@Pattern(regexp = "^([01][0-9]|2[0-3]):[0-5][0-9]$", message="{Pattern.time}")
 	private String attendance_time;
 
-	//@NotBlank(message = "退勤時間を入力してください")
-	@NotBlank(message = "{NotBlank.leave}")
+	@Pattern(regexp = "^([01][0-9]|2[0-3]):[0-5][0-9]$", message="{Pattern.time}")
 	private String leave_time;
 
+	//@DateTimeFormat(pattern = "MM/dd")
 	private String attendance_date;
 
 	public InformationForm() {

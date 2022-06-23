@@ -7,4 +7,5 @@ public interface InformationDao {
 	List<Information> getAll();
     Optional<Information> findById(int id);
     void updateInformation(Information information);
+    
 }

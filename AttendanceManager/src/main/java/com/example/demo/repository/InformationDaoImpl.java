@@ -1,5 +1,7 @@
 package com.example.demo.repository;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,21 +25,22 @@ public class InformationDaoImpl implements InformationDao {
 
 	@Override
 	public List<Information> getAll() {
-		String sql = "SELECT id,user_id,name,attendance_time, leave_time, attendance_date FROM timestamps";
-
-		List<Map<String,Object>> resultList = jdbcTemplate.queryForList(sql);
+		String sql = "SELECT id,user_id,name,attendance_time, leave_time,attendance_date FROM timestamps";
+		
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql);
 		List<Information> list = new ArrayList<Information>();
 
-		for(Map<String,Object> result : resultList) {
+		for (Map<String, Object> result : resultList) {
 			Information information = new Information();
-				information.setId((int)result.get("id"));
-				information.setUser_id((String)result.get("user_id"));
-				information.setName((String)result.get("name"));
-				information.setAttendance_time((String)result.get("attendance_time"));
-				information.setLeave_time((String)result.get("leave_time"));
-				information.setAttendance_date((result.get("attendance_date")).toString());
-
-				list.add(information);
+			information.setId((int) result.get("id"));
+			information.setUser_id((String) result.get("user_id"));
+			information.setName((String) result.get("name"));
+			information.setAttendance_time((String) result.get("attendance_time"));
+			information.setLeave_time((String) result.get("leave_time"));
+			information.setAttendance_date((Date)result.get("attendance_date"));
+			//information.setAttendance_date((result.get("attendance_date")).toString());
+			
+			list.add(information);
 		}
 		return list;
 	}
@@ -46,23 +49,23 @@ public class InformationDaoImpl implements InformationDao {
 	public Optional<Information> findById(int id) {
 		String sql = "SELECT id,user_id,name,attendance_time, leave_time, attendance_date FROM timestamps WHERE id = ?";
 
-		Map<String,Object> result = jdbcTemplate.queryForMap(sql,id);
+		Map<String, Object> result = jdbcTemplate.queryForMap(sql, id);
 		Information information = new Information();
-			information.setId((int)result.get("id"));
-			information.setUser_id((String)result.get("user_id"));
-			information.setName((String)result.get("name"));
-			information.setAttendance_time((String)result.get("attendance_time"));
-			information.setLeave_time((String)result.get("leave_time"));
-			information.setAttendance_date((result.get("attendance_date")).toString());
+		information.setId((int) result.get("id"));
+		information.setUser_id((String) result.get("user_id"));
+		information.setName((String) result.get("name"));
+		information.setAttendance_time((String) result.get("attendance_time"));
+		information.setLeave_time((String) result.get("leave_time"));
+		information.setAttendance_date((result.get("attendance_date")).toString());
 
-			Optional<Information> informationOpt = Optional.ofNullable(information);
+		Optional<Information> informationOpt = Optional.ofNullable(information);
 
 		return informationOpt;
 	}
 
 	@Override
 	public void updateInformation(Information information) {
-		jdbcTemplate.update("UPDATE  attendance_time = ?, timestamps SET leave_time = ? WHERE id = ?",
-				information.getAttendance_time(),information.getLeave_time(),information.getId());
+		jdbcTemplate.update("UPDATE timestamps SET attendance_time = ? , leave_time = ? WHERE id = ?",
+				information.getAttendance_time(), information.getLeave_time(), information.getId());
 	}
 }
