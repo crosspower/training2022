@@ -45,7 +45,7 @@ public class SettingController {
 		// ログイン情報の引き渡し
 		model.addAttribute("code", auth.getName());
 		model.addAttribute("name", auth.getDetails());
-		model.addAttribute("role", auth.getAuthorities());
+		model.addAttribute("role", auth.getAuthorities().toString());
 
 		return "setting/form";
 	}
