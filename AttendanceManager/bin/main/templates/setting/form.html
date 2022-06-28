@@ -44,22 +44,18 @@
 			</div>
 			<div class="form-group">
 				<label for="currentPass">現在のパスワード</label><br>
-				<input class="form-control" id="currentPass" name="currentPass" type="password"
-					th:value="*{currentPass}">
+				<input class="form-control" id="currentPass" name="currentPass" type="text" th:value="*{currentPass}">
 				<div class="text-danger" th:if="${#fields.hasErrors('currentPass')}" th:errors="*{currentPass}"></div>
 				<br>
 			</div>
 			<div class="form-group">
 				<label for="newPass">新しいパスワード</label><br>
-				<input class="form-control" id="newPass" name="newPass" type="password" th:value="*{newPass}">
-				<span id="buttonEye" class="fa fa-eye" onclick="pushHideButton()"></span>
+				<input class="form-control" id="newPass" name="newPass" type="text" th:value="*{newPass}">
 				<div class="text-danger" th:if="${#fields.hasErrors('newPass')}" th:errors="*{newPass}"></div><br>
 			</div>
 			<div class="form-group">
 				<label for="confirmPass">新しいパスワード(確認用)</label><br>
-				<input class="form-control" id="confirmPass" name="confirmPass" type="password"
-					th:value="*{confirmPass}">
-				<span id="buttonEye" class="fa fa-eye" onclick="pushHideButton()"></span>
+				<input class="form-control" id="confirmPass" name="confirmPass" type="text" th:value="*{confirmPass}">
 				<div class="text-danger" th:if="${#fields.hasErrors('confirmPass')}" th:errors="*{confirmPass}"></div>
 				<br>
 			</div><br>
