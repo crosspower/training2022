@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">日次勤怠画面</title>
+</head>
+
+<body>
+	<h1 th:text="${title}">日次勤怠画面</h1>
+	<p th:text="${complete}"></p>
+
+	<form method="post" action="#" th:action="@{/info/info_edit}" th:object="${informationForm}">
+
+	<table>
+		<tr>
+			<th>日付</th>
+			<th>出勤時間</th>
+			<th>退勤時間</th>
+			<th>操作</th>
+		</tr>
+		<tr th:each="information : ${informationList}">
+			<td th:text="${information.attendance_date}">attendance_date</td>
+			<td th:text="${information.attendance_time}">attendance_time</td>
+			<td th:text="${information.leave_time}">leave_time</td>
+			<td><input type="submit" value="編集"></td>
+		</tr>
+
+	</table>
+	</form>
+</body>
+
+</html>
