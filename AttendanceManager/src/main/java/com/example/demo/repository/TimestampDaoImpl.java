@@ -27,7 +27,7 @@ private final JdbcTemplate jdbcTemplate;
 		}
 	}
 	public String getTime() {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss.SSS"); 
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss"); 
 	        String formatNowDate = dtf.format(LocalDateTime.now()); 
 	        return formatNowDate;
 	}
@@ -40,9 +40,9 @@ private final JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public String getAttendance_status(String user_id) {
-		String sql = "SELECT leave_time FROM timestamps WHERE user_id = ?  ORDER BY attendance_date DESC LIMIT 1";
+		String sql = "SELECT leave_time FROM timestamps WHERE user_id = ? and attendance_date = ?";
 		try{
-			Map<String, Object> result = jdbcTemplate.queryForMap(sql, user_id);
+			Map<String, Object> result = jdbcTemplate.queryForMap(sql, user_id, getDate());
 			if(result.get("leave_time") != null) {
 				return "complete";
 			}else {

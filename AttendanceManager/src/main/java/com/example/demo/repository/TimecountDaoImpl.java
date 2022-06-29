@@ -60,7 +60,7 @@ public class TimecountDaoImpl implements TimecountDao {
 				records.remove(i);
 			} else {
 				try {
-					SimpleDateFormat sdFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+					SimpleDateFormat sdFormat = new SimpleDateFormat("HH:mm:ss");
 					attendanceTime = sdFormat.parse(records.get(i).getAttendanceTime());
 					leaveTime = sdFormat.parse(records.get(i).getLeaveTime());
 					
