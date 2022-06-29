@@ -41,6 +41,9 @@ public class SettingController {
 	@GetMapping
 	public String setting(Authentication auth, SettingForm settingForm, Model model,
 			@ModelAttribute("message") String message) {
+		
+		// タイトルの引き渡し
+		model.addAttribute("title", "個人設定");
 
 		// ログイン情報の引き渡し
 		model.addAttribute("code", auth.getName());
@@ -55,8 +58,14 @@ public class SettingController {
 	public String registerPass(Authentication auth, @Validated SettingForm settingForm, BindingResult result,
 			Model model, RedirectAttributes redirectAttributes) {
 
+		// タイトルの引き渡し
 		model.addAttribute("title", "個人設定");
 
+		// ログイン情報の引き渡し
+		model.addAttribute("code", auth.getName());
+		model.addAttribute("name", auth.getDetails());
+		model.addAttribute("role", auth.getAuthorities().toString());		
+		
 		String currentPass = settingService.getPass(auth.getName());
 		String formCurrentPass = settingForm.getCurrentPass();
 		String formNewPass = settingForm.getNewPass();

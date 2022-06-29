@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+	<!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css"  th:href="@{/css/starter-template.css}" rel="stylesheet">
+<title th:text="${title}">Insert title here</title>
+</head>
+<body>
+<main role="main" class="container">
+
+  <div class="starter-template">
+  	<div class="container">
+	  <div class="row">
+	    	<h1 th:text="${title}">Bootstrap starter template</h1>
+	  </div><br>
+  	</div>
+    <div th:unless="${#strings.isEmpty(complete)}" >
+		<div th:text="${complete}" class="alert alert-success" role="alert">
+		  A simple success alert?check it out!
+		</div>
+	</div><br>
+  </div>
+<div class="row ">
+<div class="col-md-6">
+<form method = "get" action="#" th:action="@{/timecount}"th:object="${timecountForm}" th:each="form : ${timecountForm}">
+	<input type="hidden" id="form_year" th:value="${form.year}">
+	<input type="hidden" id="form_month" th:value="${form.month}">
+		<div class="row">
+			<div class="form-group col-md-4">
+			  <select class="form-select" id="select_year" name="year"></select>
+			</div>
+			<div class="col-md-1 fs-5">年</div>
+			<div class="form-group col-md-4">
+			  <select class="form-select" id="select_month" name="month"></select>
+			</div>
+			<div class="col-md-1 fs-5">月</div>
+			<div class="form-group col-md-1">
+			<input type="submit" class="btn btn-secondary"></button>
+			</div>
+		</div>
+	<br>
+</form>
+</div>
+<div class="col-md-6">
+<table class="table table-bordered">
+	<thead>
+    <tr class="table-secondary">
+      <th scope="col">出勤日数（日）</th>
+      <th scope="col">総労働時間（時間）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="obj : ${list}">
+      <td th:text="${obj.workday}"></td>
+	  <td th:text="${obj.worktime}"></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</main><!-- /.container -->
+<script>
+
+    const select_year = document.getElementById('select_year');
+    const select_month = document.getElementById('select_month');
+    const form_year = document.getElementById('form_year');
+    const form_month = document.getElementById('form_month');
+    let i;
+	
+  var set_year =  function(){
+    // 年を生成
+    var d = new Date();
+    var this_year = d.getFullYear();
+    for(i = 2000; i <= this_year; i++){
+      let op = document.createElement('option');
+      op.value = i;
+      op.text = i;
+      select_year.appendChild(op);
+    }
+    year = parseInt(form_year.value);
+    year = year - 2000;
+    //console.log(year);
+    //console.log(form_year);
+    select_year.options[year].selected = true;
+  }
+    
+  var set_month = function(){
+    // 月を生成(12)
+    for(i = 1; i <= 12; i++){
+      let op = document.createElement('option');
+      op.value = i;
+      op.text = i;
+      select_month.appendChild(op);
+    }
+    month = parseInt(form_month.value);
+    month = month - 1;
+    select_month.options[month].selected = true;
+  }
+
+  // load時、年月変更時に実行する
+  window.onload = function(){
+    set_year();
+    set_month();
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="/docs/4.2/dist/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script></body>
+</html>
