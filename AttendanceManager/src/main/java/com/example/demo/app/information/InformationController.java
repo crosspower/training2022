@@ -1,7 +1,6 @@
 package com.example.demo.app.information;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,33 +30,40 @@ public class InformationController {
 
 	@GetMapping
 	public String info(Model model, @ModelAttribute("complete") String complete, InformationForm informationForm) {
-		List<Information> list = informationService.getAll();
 
-		model.addAttribute("informationList", list);
-		model.addAttribute("title", "日次勤怠画面");
+		int year = informationForm.getYear();
+		int month = informationForm.getMonth();
 
-		return "information/info";
-	}
-
-	@GetMapping("/{id}")
-	public String showUpdate(InformationForm informationForm, @PathVariable int id, Model model) {
-		// Informationを取得(Optionalでラップ)
-		Optional<Information> informationOpt = informationService.getInformation(id);
-		Optional<InformationForm> informationFormOpt = informationOpt.map(t -> makeInformationForm(t));
-
-		// Informationがnullでなければ中身を取り出す
-		if (informationFormOpt.isPresent()) {
-			informationForm = informationFormOpt.get();
+		// 月が10未満だったら0をつける
+		StringBuffer sb = new StringBuffer();
+		if (month < 10) {
+			sb.append('0');
 		}
-		model.addAttribute("informationForm", informationForm);
-		List<Information> list = informationService.getAll();
+		sb.append(month);
+
+		// Stringに変換
+		String strYear = String.valueOf(year);
+		String strMonth = String.valueOf(sb);
+
+		String strDate = strYear + "-" + strMonth + "%";
+
+		List<Information> list = informationService.getAll(strDate);
+
+		model.addAttribute("year", strYear);
+		model.addAttribute("month", strMonth);
+		model.addAttribute("strDate", strDate);
+
 		model.addAttribute("informationList", list);
 		model.addAttribute("title", "日次勤怠画面");
+
 		return "information/info";
 	}
-
+	
 	@GetMapping("/info_edit/{id}")
 	public String info_edit(InformationForm informationForm, Model model, @PathVariable int id) {
+		List<Information> list = informationService.getDate(id);
+
+		model.addAttribute("informationdate", list);
 		model.addAttribute("title", "日次勤怠編集画面");
 		model.addAttribute("id", id); // idを渡す
 
@@ -79,8 +85,7 @@ public class InformationController {
 		information.setAttendance_time(informationForm.getAttendance_time());
 		information.setLeave_time(informationForm.getLeave_time());
 		information.setAttendance_date(informationForm.getAttendance_date());
-		
-		
+
 		informationService.save(information);
 
 		redirectAttributes.addFlashAttribute("complete", "編集が完了しました");
@@ -88,16 +93,5 @@ public class InformationController {
 
 		return "redirect:/info";
 
-	}
-
-	private InformationForm makeInformationForm(Information information) {
-		InformationForm informationForm = new InformationForm();
-
-		informationForm.setId(information.getId());
-		informationForm.setAttendance_time(information.getAttendance_time());
-		informationForm.setLeave_time(information.getLeave_time());
-		informationForm.setAttendance_date(information.getAttendance_date());
-
-		return informationForm;
 	}
 }
